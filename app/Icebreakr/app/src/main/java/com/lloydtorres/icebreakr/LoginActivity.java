@@ -1,5 +1,6 @@
 package com.lloydtorres.icebreakr;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import com.twitter.sdk.android.Twitter;
@@ -16,6 +17,9 @@ import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private static final String STORAGE_NAME = "IcebreakrStorage"; // file name for preferences
+    private SharedPreferences storage;
+
     private Toast mToast; // used to send messages to user
 
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
@@ -26,8 +30,15 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        storage = this.getSharedPreferences(STORAGE_NAME, 0);
+
+        if (storage.getBoolean("authorized",false)) {
+            launchAndAuthorize();
+        }
+
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
+
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
 
@@ -36,14 +47,16 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void success(Result<TwitterSession> result) {
                 // Do something with result, which provides a TwitterSession for making API calls
-                Intent launchApp = new Intent(LoginActivity.this,Icebreakr.class);
-                startActivity(launchApp);
-                finish();
+                launchAndAuthorize();
             }
 
             @Override
             public void failure(TwitterException exception) {
                 showToast(getString(R.string.login_error));
+                SharedPreferences.Editor editor = storage.edit();
+                editor.putBoolean("authorized",false);
+                editor.commit();
+                finish();
             }
         });
     }
@@ -52,6 +65,15 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         loginButton.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void launchAndAuthorize() {
+        Intent launchApp = new Intent(LoginActivity.this,Icebreakr.class);
+        startActivity(launchApp);
+        SharedPreferences.Editor editor = storage.edit();
+        editor.putBoolean("authorized",true);
+        editor.commit();
+        finish();
     }
 
     // shows messages to user through Toasts
