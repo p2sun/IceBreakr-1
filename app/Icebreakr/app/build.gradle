@@ -12,6 +12,10 @@ apply plugin: 'io.fabric'
 
 repositories {
     maven { url 'https://maven.fabric.io/public' }
+    mavenCentral()
+    flatDir {
+        dirs 'libs'
+    }
 }
 
 
@@ -40,4 +44,6 @@ dependencies {
     compile('com.twitter.sdk.android:twitter:1.4.0@aar') {
         transitive = true;
     }
+    compile(name:'estimote-sdk-preview', ext:'aar')
+    compile 'com.astuetz:pagerslidingtabstrip:1.0.1'
 }
