@@ -1,6 +1,7 @@
 package com.lloydtorres.icebreakr;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -24,10 +26,12 @@ public class ProfileFragment extends Fragment {
     private View.OnClickListener nameListener;
     private View.OnClickListener descListener;
     private View.OnClickListener interestListener;
+    private View.OnClickListener signOutListener;
 
     private CardView nameCard;
     private CardView descCard;
     private CardView interestCard;
+    private LinearLayout signOut;
 
     private TextView name_field;
     private TextView desc_field;
@@ -103,6 +107,19 @@ public class ProfileFragment extends Fragment {
             }
         };
 
+        signOutListener = new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent launchApp = new Intent(getActivity(),LoginActivity.class);
+                startActivity(launchApp);
+                SharedPreferences.Editor editor = storage.edit();
+                editor.putBoolean("authorized",false);
+                editor.commit();
+                getActivity().finish();
+            }
+        };
+
     }
 
     @Override
@@ -112,10 +129,12 @@ public class ProfileFragment extends Fragment {
         nameCard = (CardView) view.findViewById(R.id.name_card);
         descCard = (CardView) view.findViewById(R.id.desc_card);
         interestCard = (CardView) view.findViewById(R.id.interest_card);
+        signOut = (LinearLayout) view.findViewById(R.id.sign_out);
 
         nameCard.setOnClickListener(nameListener);
         descCard.setOnClickListener(descListener);
         interestCard.setOnClickListener(interestListener);
+        signOut.setOnClickListener(signOutListener);
 
         name_field = (TextView) view.findViewById(R.id.name_field);
         if (name != null) {
