@@ -31,9 +31,9 @@ passport.deserializeUser(function(obj, done) {
 //   Strategies in Passport require a `verify` function, which accept
 //   credentials and invoke a callback with a user object.
 passport.use(new TwitterStrategy({
-        consumerKey: config.TWITTER_CONSUMER_KEY,
-        consumerSecret: config.TWITTER_CONSUMER_SECRET,
-        callbackURL: config.GOOGLE_CALLBACK_URL,
+        consumerKey: config.TWITTER_CLIENT_KEY,
+        consumerSecret: config.TWITTER_CLIENT_SECRET,
+        callbackURL: config.TWITTER_CALLBACK_URL,
     },
     function(token, tokenSecret, profile, done) {
 		User.findOrCreate(
