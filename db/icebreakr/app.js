@@ -10,13 +10,13 @@ var config = require('./env.json')[process.env.NODE_ENV || 'development'];
 var mongoose = require('mongoose');
 mongoose.connect(config.MONGO_URI);
 
-var inex = require('./routes/');
+var index = require('./routes/');
 
 var app = express();
 
 
 //app.use(session({secret:'ecemasterrace'}));
-app.ure(session({secret: 'ecemasterrace'}));
+app.use(session({secret: 'ecemasterrace'}));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
