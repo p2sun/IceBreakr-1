@@ -1,20 +1,24 @@
 {
-  "name": "icebreakr",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "start": "node ./bin/www"
-  },
-  "dependencies": {
-    "express": "~4.0.0",
-    "serve-favicon": "~2.1.3",
-    "morgan": "~1.0.0",
-    "cookie-parser": "~1.0.1",
-    "body-parser": "~1.0.0",
-    "debug": "~0.7.4",
-    //"jade": "~1.3.0",
-    "mongoose":"*",
-    "mongodb": "*",
+    "name": "icebreakr",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "start": "node ./bin/www"
+    },
     
-}
+    "dependencies": {
+      "body-parser": "~1.10.2",
+      "cookie-parser": "~1.3.3",
+      "debug": "~2.1.1",
+      "express": "~4.11.1",
+      "morgan": "~1.5.1",
+      "mongodb": "*",
+      "mongoose": "*",
+      "serve-favicon": "~2.2.0",
+      "passport": "*",
+      "passport-twitter": "*",
+      "express-session": "*",
+      "mongoose-findorcreate": "*"
+    
+  }
 }
