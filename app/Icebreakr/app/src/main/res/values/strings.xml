@@ -4,4 +4,12 @@
     <string name="login_error">An error occurred. Please try again.</string>
     <string name="nearby">Nearby</string>
     <string name="profile">Profile</string>
+
+    <string name="blank"></string>
+    <string name="name_text">What\'s your name?</string>
+    <string name="name_hint">e.g. Beth Tezuka</string>
+    <string name="desc_text">Tell us about yourself.</string>
+    <string name="desc_hint">Describe yourself in 150 characters or less!</string>
+    <string name="interest_text">What are your interests?</string>
+    <string name="interest_hint">Separate each interest with a comma!</string>
 </resources>
