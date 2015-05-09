@@ -55,12 +55,12 @@ public class Icebreakr extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // contacts
+            // nearby people
             if (position == 0) {
-                return new NearbyFragment();
+                return new ProfileFragment();
             }
 
-            // call actions
+            // profile
             else {
                 return new ProfileFragment();
             }

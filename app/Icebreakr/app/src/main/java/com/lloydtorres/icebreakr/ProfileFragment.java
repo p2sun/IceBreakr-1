@@ -59,6 +59,7 @@ public class ProfileFragment extends Fragment {
                             name_field.setText(input.toString());
                             SharedPreferences.Editor editor = storage.edit();
                             editor.putString("name",input.toString());
+                            editor.commit();
                         }
                     }).show();
             }
@@ -77,6 +78,7 @@ public class ProfileFragment extends Fragment {
                                 desc_field.setText(input.toString());
                                 SharedPreferences.Editor editor = storage.edit();
                                 editor.putString("desc",input.toString());
+                                editor.commit();
                             }
                         }).show();
             }
@@ -95,6 +97,7 @@ public class ProfileFragment extends Fragment {
                                 interest_field.setText(input.toString());
                                 SharedPreferences.Editor editor = storage.edit();
                                 editor.putString("interest",input.toString());
+                                editor.commit();
                             }
                         }).show();
             }
