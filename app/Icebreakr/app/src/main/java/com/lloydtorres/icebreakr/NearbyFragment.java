@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,6 +31,7 @@ import com.estimote.sdk.Utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Lloyd on 2015-05-09.
@@ -47,6 +49,8 @@ public class NearbyFragment extends Fragment {
     private static final Region ALL_ESTIMOTE_BEACONS_REGION = new Region("rid", null, null, null);
     private BeaconManager beaconManager;
     private NearbyListAdapter adapter;
+
+    private int counter = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,24 +78,52 @@ public class NearbyFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        counter++;
+
                         List<User> tmpList = new ArrayList<User>();
                         for (Beacon b : beacons) {
+                            double distance = Utils.computeAccuracy(b);
                             if (storage.getString("estimoteId", null) == null) {
-                                double distance = Utils.computeAccuracy(b);
                                 if (distance <= 0.05) {
                                     String uuid = "" + b.getMajor() + b.getMinor();
                                     SharedPreferences.Editor editor = storage.edit();
-                                    editor.putString("estimoteId",uuid);
+                                    editor.putString("estimoteId", uuid);
                                     editor.commit();
                                 }
                             }
 
+                            if (distance > 0.8) {
+                                Random coin = new Random();
+                                String[] firstName = {"Josh", "Peter", "Lloyd", "Emmanuel", "Finn", "Twilight", "Marceline", "Karen", "Hatsune", "Jebediah"};
+                                String[] lastName = {"Drake", "Sparkle", "Applejack", "Tour", "Samragi", "Mertens", "Nii", "Kerman", "Miku", "Drossel"};
+                                String[] bios = {"Don't smile because it's over, cry because it happened.",
+                                        "I have the same number of Oscars as Leonardo diCaprio.",
+                                        "Proud #uWaterloo #Engineering student!!!",
+                                        "If you can't handle me at my best, you don't deserve me at my worst.",
+                                        "Thomas the Tank is my spirit animal. <3333",
+                                        "Would you tell me why you are leaving me on hold???",
+                                        "The light and the darkness and the light and the darkness #KingdomHearts",
+                                        "Views are my own and don't reflect the opinions of Spadina Dry Cleaning."};
+                                String[] interests = {"Painting", "Drawing", "Anime", "Sportsball", "Fencing", "Archery", "Programming", "Hackathons",
+                                        "#SocialMedia", "Partyyyyy", "Video Games", "Imperial Governance", "The Argentinian Stock Crisis of the 90s",
+                                        "Pokemons", "Adventure Time", "Myo Armbanding"};
 
+                                String[] interest = new String[5];
+                                for (int i = 0; i < 5; i++) {
+                                    interest[i] = interests[coin.nextInt(interests.length)];
+                                }
 
-                            User tmpUser = new User("Pikachu", "Pikachu", "Karen Araragi", "I am very interested in yo mama.", "Yo mama", b);
-                            tmpList.add(tmpUser);
+                                String name = firstName[coin.nextInt(firstName.length)] + " " + lastName[coin.nextInt(lastName.length)];
+
+                                User tmpUser = new User("1234", "" + b.getMajor() + b.getMinor(), name, bios[coin.nextInt(bios.length)], TextUtils.join(", ", interest), b);
+                                tmpList.add(tmpUser);
+                            }
                         }
-                        adapter.replaceWith(tmpList);
+
+                        if (counter % 7 == 0) {
+                            counter = 0;
+                            adapter.replaceWith(tmpList);
+                        }
                     }
                 });
             }
