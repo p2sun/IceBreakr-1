@@ -31,7 +31,7 @@
                 android:id="@+id/distance"
                 android:tag="distance"
                 android:paddingTop="10dp"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:fontFamily="sans-serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
             <TextView
                 android:id="@+id/desc_text"
                 android:paddingTop="10dp"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:fontFamily="sans-serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
             <TextView
                 android:id="@+id/desc"
                 android:tag="desc"
-                android:textSize="12sp"
+                android:textSize="15sp"
                 android:fontFamily="sans-serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -61,7 +61,7 @@
                 tools:text="I am a student in Waterloo Engineering." />
             <TextView
                 android:id="@+id/interests_text"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:paddingTop="10dp"
                 android:fontFamily="sans-serif"
                 android:layout_width="wrap_content"
@@ -72,7 +72,7 @@
             <TextView
                 android:id="@+id/interests"
                 android:tag="interests"
-                android:textSize="12sp"
+                android:textSize="15sp"
                 android:fontFamily="sans-serif"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
