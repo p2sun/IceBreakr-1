@@ -114,15 +114,12 @@ public class NearbyFragment extends Fragment {
         if (requestCode == REQUEST_ENABLE_BT) {
             if (resultCode == Activity.RESULT_OK) {
                 connectToService();
-            } else {
-                getActivity().getActionBar().setSubtitle("Bluetooth not enabled");
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void connectToService() {
-        getActivity().getActionBar().setSubtitle("Scanning...");
         adapter.replaceWith(Collections.<User>emptyList());
         beaconManager.connect(new BeaconManager.ServiceReadyCallback() {
             @Override

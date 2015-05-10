@@ -5,6 +5,7 @@
     <string name="nearby">Nearby</string>
     <string name="profile">Profile</string>
     <string name="sign_out">Sign Out</string>
+    <string name="refresh">Refresh</string>
 
     <string name="blank"></string>
     <string name="name_text">What\'s your name?</string>

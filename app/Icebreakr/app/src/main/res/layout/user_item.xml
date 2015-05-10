@@ -71,7 +71,7 @@
                 android:text="@string/interests_label" />
             <TextView
                 android:id="@+id/interests"
-                android:tag="name"
+                android:tag="interests"
                 android:textSize="12sp"
                 android:fontFamily="sans-serif"
                 android:layout_width="wrap_content"
