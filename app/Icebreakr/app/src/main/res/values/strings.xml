@@ -13,4 +13,7 @@
     <string name="desc_hint">In 150 words or less.</string>
     <string name="interest_text">What are your interests?</string>
     <string name="interest_hint">Separate each interest with a comma</string>
+
+    <string name="desc_label">About Me</string>
+    <string name="interests_label">Interests</string>
 </resources>

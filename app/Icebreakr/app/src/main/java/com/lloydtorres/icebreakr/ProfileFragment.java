@@ -76,6 +76,7 @@ public class ProfileFragment extends Fragment {
                         .title(R.string.desc_text)
                         .content(R.string.desc_text)
                         .inputType(InputType.TYPE_CLASS_TEXT)
+                        .inputMaxLengthRes(150, R.color.dgts__purple_pressed)
                         .input(R.string.desc_hint, R.string.blank, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
@@ -155,4 +156,6 @@ public class ProfileFragment extends Fragment {
 
         return view;
     }
+
+
 }
