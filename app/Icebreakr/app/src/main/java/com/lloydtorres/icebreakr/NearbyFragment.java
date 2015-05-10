@@ -3,6 +3,7 @@ package com.lloydtorres.icebreakr;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.support.v4.app.Fragment;
@@ -15,9 +16,16 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.Cache;
+import com.android.volley.Network;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
 import com.estimote.sdk.Beacon;
 import com.estimote.sdk.BeaconManager;
 import com.estimote.sdk.Region;
+import com.estimote.sdk.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,21 +35,35 @@ import java.util.List;
  * Created by Lloyd on 2015-05-09.
  */
 public class NearbyFragment extends Fragment {
-
     private View view;
+
+    private static final String STORAGE_NAME = "IcebreakrStorage"; // file name for preferences
+    private SharedPreferences storage;
+
+    private RequestQueue mRequestQueue;
+    private String twitterId;
 
     private static final int REQUEST_ENABLE_BT = 1234;
     private static final Region ALL_ESTIMOTE_BEACONS_REGION = new Region("rid", null, null, null);
-
     private BeaconManager beaconManager;
     private NearbyListAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        storage = this.getActivity().getSharedPreferences(STORAGE_NAME, 0);
 
         // Configure device list.
         adapter = new NearbyListAdapter(getActivity());
+
+        twitterId = storage.getString("twitterId", null);
+
+        // Instantiate request queue
+        Cache cache = new DiskBasedCache(getActivity().getCacheDir(), 1024 * 1024); // 1MB cap
+        Network network = new BasicNetwork(new HurlStack());
+        mRequestQueue = new RequestQueue(cache, network);
+        mRequestQueue.start();
+        String url ="http://icebreakr.herokuapp.com/users/";
 
         // Configure BeaconManager.
         beaconManager = new BeaconManager(getActivity());
@@ -54,6 +76,18 @@ public class NearbyFragment extends Fragment {
                     public void run() {
                         List<User> tmpList = new ArrayList<User>();
                         for (Beacon b : beacons) {
+                            if (storage.getString("estimoteId", null) == null) {
+                                double distance = Utils.computeAccuracy(b);
+                                if (distance <= 0.05) {
+                                    String uuid = "" + b.getMajor() + b.getMinor();
+                                    SharedPreferences.Editor editor = storage.edit();
+                                    editor.putString("estimoteId",uuid);
+                                    editor.commit();
+                                }
+                            }
+
+
+
                             User tmpUser = new User("Pikachu", "Pikachu", "Karen Araragi", "I am very interested in yo mama.", "Yo mama", b);
                             tmpList.add(tmpUser);
                         }

@@ -14,6 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.volley.Cache;
+import com.android.volley.Network;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
 
 /**
  * Created by Lloyd on 2015-05-09.
@@ -21,6 +27,8 @@ import com.afollestad.materialdialogs.MaterialDialog;
 public class ProfileFragment extends Fragment {
     private static final String STORAGE_NAME = "IcebreakrStorage"; // file name for preferences
     private SharedPreferences storage;
+
+    private RequestQueue mRequestQueue;
 
     private View view;
     private View.OnClickListener nameListener;
@@ -50,6 +58,13 @@ public class ProfileFragment extends Fragment {
         desc = storage.getString("desc", null);
         interests = storage.getString("interest", null);
 
+        // Instantiate request queue
+        Cache cache = new DiskBasedCache(getActivity().getCacheDir(), 1024 * 1024); // 1MB cap
+        Network network = new BasicNetwork(new HurlStack());
+        mRequestQueue = new RequestQueue(cache, network);
+        mRequestQueue.start();
+        String url ="http://icebreakr.herokuapp.com/users/";
+
         nameListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,9 +75,10 @@ public class ProfileFragment extends Fragment {
                     .input(R.string.name_hint, R.string.blank, new MaterialDialog.InputCallback() {
                         @Override
                         public void onInput(MaterialDialog dialog, CharSequence input) {
-                            name_field.setText(input.toString());
+                            name = input.toString();
+                            name_field.setText(name);
                             SharedPreferences.Editor editor = storage.edit();
-                            editor.putString("name",input.toString());
+                            editor.putString("name",name);
                             editor.commit();
                         }
                     }).show();
@@ -80,9 +96,10 @@ public class ProfileFragment extends Fragment {
                         .input(R.string.desc_hint, R.string.blank, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
-                                desc_field.setText(input.toString());
+                                desc = input.toString();
+                                desc_field.setText(desc);
                                 SharedPreferences.Editor editor = storage.edit();
-                                editor.putString("desc",input.toString());
+                                editor.putString("desc", desc);
                                 editor.commit();
                             }
                         }).show();
@@ -99,9 +116,10 @@ public class ProfileFragment extends Fragment {
                         .input(R.string.interest_hint, R.string.blank, new MaterialDialog.InputCallback() {
                             @Override
                             public void onInput(MaterialDialog dialog, CharSequence input) {
-                                interest_field.setText(input.toString());
+                                interests = input.toString();
+                                interest_field.setText(interests);
                                 SharedPreferences.Editor editor = storage.edit();
-                                editor.putString("interest",input.toString());
+                                editor.putString("interest",interests);
                                 editor.commit();
                             }
                         }).show();
@@ -116,6 +134,8 @@ public class ProfileFragment extends Fragment {
                 startActivity(launchApp);
                 SharedPreferences.Editor editor = storage.edit();
                 editor.putBoolean("authorized",false);
+                editor.remove("twitterId");
+                editor.remove("estimoteId");
                 editor.commit();
                 getActivity().finish();
             }
@@ -139,19 +159,19 @@ public class ProfileFragment extends Fragment {
 
         name_field = (TextView) view.findViewById(R.id.name_field);
         if (name != null) {
-            name_field.setText(storage.getString("name", null));
+            name_field.setText(storage.getString("name", ""));
         }
 
         desc_field = (TextView) view.findViewById(R.id.desc_field);
 
         if (desc != null) {
-            desc_field.setText(storage.getString("desc", null));
+            desc_field.setText(storage.getString("desc", ""));
         }
 
         interest_field = (TextView) view.findViewById(R.id.interest_field);
 
         if (interests != null) {
-            interest_field.setText(storage.getString("interest", null));
+            interest_field.setText(storage.getString("interest", ""));
         }
 
         return view;

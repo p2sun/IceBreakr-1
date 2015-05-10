@@ -3,6 +3,7 @@ package com.lloydtorres.icebreakr;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import io.fabric.sdk.android.Fabric;
@@ -32,21 +33,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         storage = this.getSharedPreferences(STORAGE_NAME, 0);
 
-        if (storage.getBoolean("authorized",false)) {
-            launchAndAuthorize();
-        }
-
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
 
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
 
+        if (storage.getBoolean("authorized",false)) {
+            launchAndAuthorize();
+        }
+
         loginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
-                // Do something with result, which provides a TwitterSession for making API calls
                 launchAndAuthorize();
             }
 
@@ -68,11 +68,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void launchAndAuthorize() {
-        Intent launchApp = new Intent(LoginActivity.this,Icebreakr.class);
-        startActivity(launchApp);
         SharedPreferences.Editor editor = storage.edit();
         editor.putBoolean("authorized",true);
+        // Do something with result, which provides a TwitterSession for making API calls
+        TwitterSession session = Twitter.getSessionManager().getActiveSession();
+        String userId = String.valueOf(session.getUserId());
+        editor.putString("twitterId",userId);
         editor.commit();
+        Intent launchApp = new Intent(LoginActivity.this,Icebreakr.class);
+        startActivity(launchApp);
         finish();
     }
 
