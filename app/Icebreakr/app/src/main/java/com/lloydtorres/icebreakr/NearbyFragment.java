@@ -115,7 +115,7 @@ public class NearbyFragment extends Fragment {
 
                                 String name = firstName[coin.nextInt(firstName.length)] + " " + lastName[coin.nextInt(lastName.length)];
 
-                                User tmpUser = new User("1234", "" + b.getMajor() + b.getMinor(), name, bios[coin.nextInt(bios.length)], TextUtils.join(", ", interest), b);
+                                User tmpUser = new User("1234", "" + b.getMajor() + b.getMinor(), name, TextUtils.join(", ", interest), bios[coin.nextInt(bios.length)], b);
                                 tmpList.add(tmpUser);
                             }
                         }
